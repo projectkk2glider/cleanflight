@@ -44,14 +44,12 @@ int32_t mAhDrawn = 0;               // milliampere hours drawn from the battery 
 
 batteryConfig_t *batteryConfig;
 
-uint16_t batteryAdcToVoltage(uint16_t src)
+uint16_t batteryAdcSumToVoltage(uint32_t sum)
 {
-    // calculate battery voltage based on ADC reading
+    // calculate battery voltage based on sum of BATTERY_SAMPLE_COUNT ADC readings
     // result is Vbatt in 0.1V steps. 3.3V = ADC Vref, 0xFFF = 12bit adc, 110 = 11:1 voltage divider (10k:1k) * 10 for 0.1V
-    return (((src) * 3.3f) / 0xFFF) * batteryConfig->vbatscale;
+    return (sum * batteryConfig->vbatscale * 3.3f) / (0xFFF * BATTERY_SAMPLE_COUNT)  + 0.05f;
 }
-
-#define BATTERY_SAMPLE_COUNT 8
 
 void updateBatteryVoltage(void)
 {
@@ -67,7 +65,7 @@ void updateBatteryVoltage(void)
     for (index = 0; index < BATTERY_SAMPLE_COUNT; index++) {
         vbatSampleTotal += vbatSamples[index];
     }
-    vbat = batteryAdcToVoltage(vbatSampleTotal / BATTERY_SAMPLE_COUNT);
+    vbat = batteryAdcSumToVoltage(vbatSampleTotal);
 }
 
 batteryState_e calculateBatteryState(void)

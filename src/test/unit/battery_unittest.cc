@@ -63,7 +63,7 @@ TEST(BatteryTest, BatteryADCToVoltage)
                 batteryAdcToVoltageExpectation->scale
         );
 
-        uint16_t pointOneVoltSteps = batteryAdcToVoltage(batteryAdcToVoltageExpectation->adcReading);
+        uint16_t pointOneVoltSteps = batteryAdcSumToVoltage(batteryAdcToVoltageExpectation->adcReading * BATTERY_SAMPLE_COUNT);
 
         EXPECT_EQ(pointOneVoltSteps, batteryAdcToVoltageExpectation->expectedVoltageInDeciVoltSteps);
     }
