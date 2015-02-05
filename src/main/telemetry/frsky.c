@@ -105,6 +105,8 @@ extern int16_t telemTemperature1; // FIXME dependency on mw.c
 #define ID_ACC_Y              0x25
 #define ID_ACC_Z              0x26
 #define ID_VOLTAGE_AMP        0x39
+#define ID_VOLTAGE_AMP_BP     0x3A
+#define ID_VOLTAGE_AMP_AP     0x3B
 #define ID_CURRENT            0x28
 // User defined data IDs
 #define ID_GYRO_X             0x40
@@ -362,11 +364,20 @@ static void sendVoltage(void)
  */
 static void sendVoltageAmp(void)
 {
-    /*
-     * Use new ID 0x39 to send voltage directly in 0.1 volts resolution
-     */
-    sendDataHead(ID_VOLTAGE_AMP);
-    serialize16(vbat);
+    if (telemetryConfig->frsky_hiprec_vfas) {
+        /*
+         * Use new ID 0x39 to send voltage directly in 0.1 volts resolution
+         */
+        sendDataHead(ID_VOLTAGE_AMP);
+        serialize16(vbat);
+    } else {
+        uint16_t voltage = (vbat * 110) / 21;
+
+        sendDataHead(ID_VOLTAGE_AMP_BP);
+        serialize16(voltage / 100);
+        sendDataHead(ID_VOLTAGE_AMP_AP);
+        serialize16(((voltage % 100) + 5) / 10);
+    }
 }
 
 static void sendAmperage(void)
