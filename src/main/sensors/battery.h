@@ -17,8 +17,6 @@
 
 #pragma once
 
-#define BATTERY_SAMPLE_COUNT 8
-
 #define VBAT_SCALE_DEFAULT 110
 #define VBAT_SCALE_MIN 0
 #define VBAT_SCALE_MAX 255
@@ -59,7 +57,7 @@ extern uint16_t amperageLatestADC;
 extern int32_t amperage;
 extern int32_t mAhDrawn;
 
-uint16_t batteryAdcSumToVoltage(uint32_t sum);
+uint16_t batteryAdcToVoltage(uint16_t src);
 batteryState_e calculateBatteryState(void);
 void updateBatteryVoltage(void);
 void batteryInit(batteryConfig_t *initialBatteryConfig);
