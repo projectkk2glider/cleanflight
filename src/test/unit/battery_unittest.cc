@@ -28,10 +28,10 @@ extern "C" {
 typedef struct batteryAdcToVoltageExpectation_s {
     uint16_t adcReading;
     uint16_t expectedVoltageInDeciVoltSteps;
-    uint8_t scale;
+    uint16_t scale;
 } batteryAdcToVoltageExpectation_t;
 
-#define ELEVEN_TO_ONE_VOLTAGE_DIVIDER 110 // (10k:1k) * 10 for 0.1V
+#define ELEVEN_TO_ONE_VOLTAGE_DIVIDER 1100 // (10k:1k) * 100 for 0.01V
 
 TEST(BatteryTest, BatteryADCToVoltage)
 {
@@ -49,7 +49,7 @@ TEST(BatteryTest, BatteryADCToVoltage)
             {1900, 1684 /*168.42*/, ELEVEN_TO_ONE_VOLTAGE_DIVIDER},
             {1910, 1693 /*169.31*/, ELEVEN_TO_ONE_VOLTAGE_DIVIDER},
             {   0,    0 /*  0.00*/, VBAT_SCALE_MAX},
-            {4096, 8417 /*841.71*/, VBAT_SCALE_MAX}
+            {4096,16504 /*165.04*/, VBAT_SCALE_MAX}
     };
     uint8_t testIterationCount = sizeof(batteryAdcToVoltageExpectations) / sizeof(batteryAdcToVoltageExpectation_t);
 

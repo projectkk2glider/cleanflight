@@ -17,9 +17,9 @@
 
 #pragma once
 
-#define VBAT_SCALE_DEFAULT 110
+#define VBAT_SCALE_DEFAULT 1100
 #define VBAT_SCALE_MIN 0
-#define VBAT_SCALE_MAX 255
+#define VBAT_SCALE_MAX 5000
 
 typedef enum {
     CURRENT_SENSOR_NONE = 0,
@@ -29,12 +29,12 @@ typedef enum {
 } currentSensor_e;
 
 typedef struct batteryConfig_s {
-    uint8_t vbatscale;                      // adjust this to match battery voltage to reported value
+    uint16_t vbatscale;                     // adjust this to match battery voltage to reported value
     uint8_t vbatmaxcellvoltage;             // maximum voltage per cell, used for auto-detecting battery voltage in 0.1V units, default is 43 (4.3V)
     uint8_t vbatmincellvoltage;             // minimum voltage per cell, this triggers battery critical alarm, in 0.1V units, default is 33 (3.3V)
     uint8_t vbatwarningcellvoltage;         // warning voltage per cell, this triggers battery warning alarm, in 0.1V units, default is 35 (3.5V)
 
-    int16_t currentMeterScale;             // scale the current sensor output voltage to milliamps. Value in 1/10th mV/A
+    int16_t currentMeterScale;              // scale the current sensor output voltage to milliamps. Value in 1/10th mV/A
     uint16_t currentMeterOffset;            // offset of the current sensor in millivolt steps
     currentSensor_e  currentMeterType;      // type of current meter used, either ADC or virtual
 
