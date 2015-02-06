@@ -1363,7 +1363,7 @@ static void cliStatus(char *cmdline)
 
     UNUSED(cmdline);
 
-    printf("System Uptime: %d seconds, Voltage: %d * 0.1V (%dS battery)\r\n",
+    printf("System Uptime: %d seconds, Voltage: %d * 0.01V (%dS battery)\r\n",
         millis() / 1000, vbat, batteryCellCount);
     mask = sensorsMask();
 

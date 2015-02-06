@@ -850,7 +850,7 @@ static bool processOutCommand(uint8_t cmdMSP)
         break;
     case MSP_ANALOG:
         headSerialReply(7);
-        serialize8((uint8_t)constrain(vbat, 0, 255));
+        serialize8((uint8_t)constrain((vbat + 5) / 10, 0, 255));   // MSP voltage is in 0.1V steps
         serialize16((uint16_t)constrain(mAhDrawn, 0, 0xFFFF)); // milliamphours drawn from battery
         serialize16(rssi);
         if(masterConfig.batteryConfig.multiwiiCurrentMeterOutput) {

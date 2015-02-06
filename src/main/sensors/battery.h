@@ -49,7 +49,7 @@ typedef enum {
     BATTERY_CRITICAL
 } batteryState_e;
 
-extern uint8_t vbat;
+extern uint16_t vbat;
 extern uint16_t vbatLatestADC;
 extern uint8_t batteryCellCount;
 extern uint16_t batteryWarningVoltage;

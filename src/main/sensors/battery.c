@@ -35,7 +35,7 @@ uint8_t batteryCellCount = 3;       // cell count
 uint16_t batteryWarningVoltage;
 uint16_t batteryCriticalVoltage;
 
-uint8_t vbat = 0;                   // battery voltage in 0.1V steps
+uint16_t vbat = 0;                  // battery voltage in 0.01V steps
 uint16_t vbatLatestADC = 0;         // most recent unsmoothed raw reading from vbat ADC
 uint16_t amperageLatestADC = 0;     // most recent raw reading from current ADC
 
@@ -47,8 +47,8 @@ batteryConfig_t *batteryConfig;
 uint16_t batteryAdcToVoltage(uint16_t src)
 {
     // calculate battery voltage based on ADC reading
-    // result is Vbatt in 0.1V steps. 3.3V = ADC Vref, 0xFFF = 12bit adc, 110 = 11:1 voltage divider (10k:1k) * 10 for 0.1V
-    return ((uint32_t)src * batteryConfig->vbatscale * 33 + (0xFFF * 5)) / (0xFFF * 10);
+    // result is Vbatt in 0.01V steps. 3.3V = ADC Vref, 0xFFF = 12bit adc, 110 = 11:1 voltage divider (10k:1k) * 10 for 0.1V
+    return ((uint32_t)src * batteryConfig->vbatscale * 33 + (0xFFF/2)) / 0xFFF;
 }
 
 #define BATTERY_SAMPLE_COUNT 8
@@ -94,13 +94,13 @@ void batteryInit(batteryConfig_t *initialBatteryConfig)
 
     // autodetect cell count, going from 1S..8S
     for (i = 1; i < 8; i++) {
-        if (vbat < i * batteryConfig->vbatmaxcellvoltage)
+        if (vbat < i * (uint32_t)batteryConfig->vbatmaxcellvoltage * 10)
             break;
     }
 
     batteryCellCount = i;
-    batteryWarningVoltage = batteryCellCount * batteryConfig->vbatwarningcellvoltage;
-    batteryCriticalVoltage = batteryCellCount * batteryConfig->vbatmincellvoltage;
+    batteryWarningVoltage = (uint32_t)batteryCellCount * batteryConfig->vbatwarningcellvoltage * 10;
+    batteryCriticalVoltage = (uint32_t)batteryCellCount * batteryConfig->vbatmincellvoltage * 10;
 }
 
 #define ADCVREF 33L

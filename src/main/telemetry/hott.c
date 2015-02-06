@@ -211,10 +211,11 @@ void hottPrepareGPSResponse(HOTT_GPS_MSG_t *hottGPSMessage)
 
 static inline void hottEAMUpdateBattery(HOTT_EAM_MSG_t *hottEAMMessage)
 {
-    hottEAMMessage->main_voltage_L = vbat & 0xFF;
-    hottEAMMessage->main_voltage_H = vbat >> 8;
-    hottEAMMessage->batt1_voltage_L = vbat & 0xFF;
-    hottEAMMessage->batt1_voltage_H = vbat >> 8;
+    uint16_t voltage = (vbat + 5) / 10;
+    hottEAMMessage->main_voltage_L = voltage & 0xFF;
+    hottEAMMessage->main_voltage_H = voltage >> 8;
+    hottEAMMessage->batt1_voltage_L = voltage & 0xFF;
+    hottEAMMessage->batt1_voltage_H = voltage >> 8;
 }
 
 static inline void hottEAMUpdateCurrentMeter(HOTT_EAM_MSG_t *hottEAMMessage)

@@ -334,20 +334,23 @@ void handleSmartPortTelemetry(void)
                 }
                 break;
             case FSSP_DATAID_VFAS       :
-                smartPortSendPackage(id, vbat * 83); // supposedly given in 0.1V, unknown requested unit
-                // multiplying by 83 seems to make Taranis read correctly
+                smartPortSendPackage(id, vbat); // given in 0.01V steps,
                 smartPortHasRequest = 0;
                 break;
             case FSSP_DATAID_CURRENT    :
-                smartPortSendPackage(id, amperage); // given in 10mA steps, unknown requested unit
+                smartPortSendPackage(id, (amperage + 5) / 10); // given in 0.1A steps
                 smartPortHasRequest = 0;
                 break;
             //case FSSP_DATAID_RPM        :
             case FSSP_DATAID_ALTITUDE   :
-                smartPortSendPackage(id, BaroAlt); // unknown given unit, requested 100 = 1 meter
+                smartPortSendPackage(id, constrain(BaroAlt, 0, 0xFFFF)); // given in 0.01m (1cm) steps
                 smartPortHasRequest = 0;
                 break;
             case FSSP_DATAID_FUEL       :
+                /*
+                    Fuel level has range of 0 to 100 (its meaning is percent). There is no point
+                    in sending mAh consumed here
+                */
                 smartPortSendPackage(id, mAhDrawn); // given in mAh, unknown requested unit
                 smartPortHasRequest = 0;
                 break;
