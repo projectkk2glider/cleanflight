@@ -347,10 +347,6 @@ void handleSmartPortTelemetry(void)
                 smartPortHasRequest = 0;
                 break;
             case FSSP_DATAID_FUEL       :
-                /*
-                    Fuel level has range of 0 to 100 (its meaning is percent). There is no point
-                    in sending mAh consumed here
-                */
                 smartPortSendPackage(id, mAhDrawn); // given in mAh, unknown requested unit
                 smartPortHasRequest = 0;
                 break;
